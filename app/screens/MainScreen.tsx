@@ -3,10 +3,40 @@ import { StyleSheet } from 'react-native';
 import BeaconInfo from '../components/BeaconInfo';
 import LargeButton from '../components/LargeButton';
 import { HorizontalSeparator } from '../components/Separators';
+import * as SQLite from 'expo-sqlite'
+
 
 import { View } from '../components/Themed';
 
+
+
+
+
+
+
 export default function MainScreen() {
+
+  const db = SQLite.openDatabase('testdb.db');
+
+  db.transaction(tx => {
+    tx.executeSql(
+      'create table if not exists items (id integer primary key not null, done int, value text);'
+    );
+  });
+
+  const text = "test data!";
+
+  db.transaction(
+    tx => {
+      tx.executeSql('insert into items (done, value) values (0, ?)', [text]);
+      tx.executeSql('select * from items', [], (_, { rows }) =>
+        console.log(JSON.stringify(rows))
+      );
+    },
+    null,
+    console.log('FINISHED')
+  );
+
   return (
     <View style={styles.container}>
       <LargeButton accessibilityLabel="Tap here to repeat the previous audio output">
