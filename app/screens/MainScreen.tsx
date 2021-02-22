@@ -4,7 +4,8 @@ import BeaconInfo from '../components/BeaconInfo';
 import LargeButton from '../components/LargeButton';
 import { HorizontalSeparator } from '../components/Separators';
 import * as SQLite from 'expo-sqlite'
-
+import Storage from '../storage';
+import location from '../storage';
 
 import { View } from '../components/Themed';
 
@@ -15,7 +16,7 @@ import { View } from '../components/Themed';
 
 
 export default function MainScreen() {
-
+  /*
   const db = SQLite.openDatabase('testdb.db');
 
   db.transaction(tx => {
@@ -36,6 +37,18 @@ export default function MainScreen() {
     null,
     console.log('FINISHED')
   );
+  */
+
+  const testData = {code: "2-1-1", description: "abc"};
+
+  const storage = new Storage();
+  const db = storage.createDb();
+  storage.createTable(db);
+  storage.loadData(db, testData);
+
+
+
+
 
   return (
     <View style={styles.container}>
