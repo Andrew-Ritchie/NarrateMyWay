@@ -8,10 +8,25 @@ import Storage from '../storage';
 import location from '../storage';
 
 import { View } from '../components/Themed';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 
+class CurrentState{
+  currentDescription:String;
 
+  constructor(){
+    this.currentDescription = "dummy"
+  }
+
+  updateState(description:String){
+    this.currentDescription = description
+    console.log(description)
+
+  }
+
+
+}
 
 
 
@@ -39,12 +54,31 @@ export default function MainScreen() {
   );
   */
 
-  const testData = {code: "2-1-1", description: "abc"};
 
   const storage = new Storage();
-  const db = storage.createDb();
-  storage.createTable(db);
-  storage.loadData(db, testData);
+  const currentstate = new CurrentState();
+
+  // storage.printData();
+  // storage.printVersionData();
+
+  storage.createTable();
+  // storage.printData();
+  // storage.printVersionData();
+  
+
+  // while (previousState == currentstate.currentDescription);
+
+  function printLookupResult(codeDescription:String){
+    console.log(codeDescription)
+  }
+
+  storage.lookUpCodeDescription("1-1-1", printLookupResult);
+
+
+
+
+  
+
 
 
 
