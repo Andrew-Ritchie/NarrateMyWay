@@ -26,6 +26,8 @@ function MainScreen({
 
   storage.lookupDataForNMWCode('1-1-1', printLookupResult);
 
+  storage.parseExpansionPack();
+
   return (
     <View style={styles.container}>
       <LargeButton accessibilityLabel="Tap here to repeat the previous audio output">
