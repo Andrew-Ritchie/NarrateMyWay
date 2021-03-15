@@ -3,6 +3,7 @@ import * as SQLite from 'expo-sqlite';
 import * as nmwTable from './nmwstandard.json';
 import * as expansionData from './example_expansion_packs/expansion1.json';
 
+
 // Interface for data
 interface location {
   code: string;
@@ -38,9 +39,12 @@ class Storage {
       tx.executeSql(
         'CREATE TABLE IF NOT EXISTS expansionPackTable (id int NOT NULL AUTO_INCREMENT, pack_name text, description text, w3w text, organisation text);'
       );
+      // 'CREATE TABLE IF NOT EXISTS uuidTable (id integer primary key not null, nmw text, name text, description text, website text, expansionPackID int, FOREIGN KEY (expansionPackID) REFERENCES expansionPackTable(id));'
+      /*
       tx.executeSql(
         'CREATE TABLE IF NOT EXISTS uuidTable (id integer primary key not null, nmw text, name text, description text, website text);'
       );
+      */
       tx.executeSql('SELECT * FROM versionRecord', [], (_, results) => {
         if (results.rows.length == 0) {
           tx.executeSql('INSERT INTO versionRecord (version) VALUES (?)', [
@@ -70,20 +74,47 @@ class Storage {
 
   // Parse Expansion pack json object
   parseExpansionPack(){
-    console.log(expansionData.meta);
+    //console.log(expansionData.meta);
     this.db.transaction((tx) => {
       tx.executeSql(
         'INSERT INTO expansionPackTable (pack_name, description, w3w, organisation) VALUES (?,?,?,?)',
-        [expansionData.meta.pack_name, expansionData.meta.description, expansionData.meta.w3w, expansionData.meta.organisation]
+        [expansionData.meta.pack_name, expansionData.meta.description, expansionData.meta.w3w, expansionData.meta.organisation],
+        console.log("complete")
       );
     expansionData.UUIDs.forEach((value) => {
       tx.executeSql(
         'INSERT INTO uuidTable (id, nmw, name, description, website) VALUES (?,?,?,?,?)',
-        [value.code, value.nmw, value.name, value.description, value.website]
+        [value.code, value.nmw, value.name, value.description, value.website],
+        console.log("complete 2")
       );
       });
     });
+    console.log("hello")
   }
+  /*
+  deleteExpansionPack(uuid: string){
+    this.db.transaction((tx) => {
+      tx.executeSql(
+        'DELETE FROM table_name WHERE condition'
+      )
+    });
+  }
+  */ 
+
+  getUUIDData(code: string, callback: Function){
+    this.db.transaction((tx) => {
+      tx.executeSql(
+        'SELECT description FROM uuidTable WHERE id=?',
+        [code],
+        (_, results) => {
+          callback(
+            results.rows.item(0).description
+          );
+        }
+      );
+    });
+  }
+
 
   // Input location code data
   loadData(data: location) {

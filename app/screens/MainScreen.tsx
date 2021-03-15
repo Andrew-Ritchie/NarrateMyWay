@@ -11,6 +11,7 @@ import { View } from '../components/Themed';
 import { Beacon } from '../src/state/types';
 import { RootStackParamList } from '../types';
 
+
 function MainScreen({
   navigation
 }: StackScreenProps<RootStackParamList, 'Main'>) {
@@ -22,11 +23,20 @@ function MainScreen({
   function printLookupResult(codeDescription: String, codeEmblem: String) {
     console.log(codeDescription);
     console.log(codeEmblem);
+    console.log("testing this runs.")
   }
+  storage.lookupDataForNMWCode('00000000-0000-0000-0000-000000000001', printLookupResult);
 
-  storage.lookupDataForNMWCode('1-1-1', printLookupResult);
-
+  /*
+  function printUUIDData(codeDescription: String) {
+    console.log(codeDescription);
+  }
   storage.parseExpansionPack();
+  */
+
+  // storage.getUUIDData('1-1-1', printUUIDData);
+
+
 
   return (
     <View style={styles.container}>
@@ -47,7 +57,7 @@ const mapStateToProps = (
   state: Beacon,
   ownProps: { navigation: StackNavigationProp<RootStackParamList, 'Main'> }
 ) => {
-  console.log(state);
+  // console.log(state);
   if (!state.beaconName) {
     ownProps.navigation.replace('Scanning');
   }
